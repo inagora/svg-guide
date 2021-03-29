@@ -8,4 +8,27 @@
 ## 需求
 活动需求，开发一个如下图的功能
 
-<img src="https://inagora.github.io/svg-guide/res/page.jpg" style="max-width:375px">
+<img src="https://inagora.github.io/svg-guide/res/page.jpg" style="max-width:320px">
+
+因为可以获得不同的字，弹窗就是一个可复用的组件。把通用的UI抽出来，就是
+
+<img src="https://inagora.github.io/svg-guide/res/bg.png" style="max-width:320px">
+
+这个图片的格式是PNG，大小84K。使用PNG是因为它的四个角需要镂空。
+
+## 优化第一波：mask-image
+上面的png图比较大，换成jpg就小很多了。
+<img src="https://inagora.github.io/svg-guide/res/bg.jpg" style="max-width:320px">
+jpg格式，大小29K，只有Png的34%。不过它不支持透明，四个角没法做到镂空的效果。
+
+这时候就可以使用css属性[mask-image](https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask-image)了，这个属性用于设置元素上遮罩层的图像。使用遮罩，把不需要的地方裁切掉。遮罩图如下：
+<img src="https://inagora.github.io/svg-guide/res/mask.png" style="max-width:320px">
+
+它的格式是png，四个角的透明度为0。
+
+代码如下：
+``` css
+.dia{
+	background
+}
+```
