@@ -47,7 +47,7 @@ svg既然是“图片”，那就可以替代做一些图片的工作。比如�
 
 `mask.svg`文件内容如下：
 ``` html
-<svg viewBox="0 0 566 700" class="com-mask">
+<svg viewBox="0 0 566 700">
 	<path id="baseShape" fill="red" d="M25 0h516a25,25 0 0,0 25,25v650a25,25 0 0,0 -25,25h-516a25,25 0 0,0 -25,-25v-650a25,25 0 0,0 25,-25Z"></path>
 </svg>
 ```
@@ -63,3 +63,24 @@ svg既然是“图片”，那就可以替代做一些图片的工作。比如�
 	mask-size: 100%;
 }
 ```
+一通操作后，就不需要mask.png这个图片了，增加了一个100多字节的svg文件，资源大小减少了。
+
+### 优化第三波：svg的直接绘制
+上面即然已经用了svg，那干嘛不直接用svg画这个弹窗背景，裁剪啥的都是可以不使用的。
+
+<img src="https://inagora.github.io/svg-guide/res/bg.png" style="max-width:240px">
+
+看这个图，它的边缘，可以直接用clipPath来裁剪；边缘靠里的一圈线，正好和边缘的形状一致，路径参数还能复用。最后只需要图片中间方框和云，使用图片来做就行。（当然中间一块儿也是可以用svg做的，只是有些复杂）。
+
+``` html
+<svg viewBox="0 0 566 700" xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		<path id="baseShape" d="M25 0h516a25,25 0 0,0 25,25v650a25,25 0 0,0 -25,25h-516a25,25 0 0,0 -25,-25v-650a25,25 0 0,0 25,-25Z"></path>
+	</defs>
+	<use id="bg" href="#baseShape" fill="#db3e4a" />
+	<use id="line" href="#baseShape" stroke="#e09b6c" fill="transparent" stroke-width="1" x="11" y="11" style="transform:scale(0.96,0.97);" />
+	<image id="card" x="95" y="78" href="./card.jpg" height="382" width="420"></image>
+</svg>
+```
+上面图用path定义了背景图和线圈，因为它们形状一致，就复用了一下。然后在上面盖上了最小尺寸的图。
+这个方式下，最后的资源总量为 21k。
