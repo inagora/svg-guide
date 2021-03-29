@@ -7,4 +7,4 @@
 
 ## 需求
 活动需求，开发一个如下图的功能
-![sss](./page.jpg)
+![sss](./res/page.jpg)
