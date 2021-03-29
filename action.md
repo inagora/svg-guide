@@ -7,4 +7,5 @@
 
 ## 需求
 活动需求，开发一个如下图的功能
-![sss](./res/page.jpg)
+
+<img src="https://inagora.github.io/svg-guide/res/page.jpg" style="max-width:375px">
