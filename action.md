@@ -18,10 +18,13 @@
 
 ## 优化第一波：mask-image
 上面的png图比较大，换成jpg就小很多了。
+
 <img src="https://inagora.github.io/svg-guide/res/bg.jpg" style="max-width:320px">
+
 jpg格式，大小29K，只有Png的34%。不过它不支持透明，四个角没法做到镂空的效果。
 
 这时候就可以使用css属性[mask-image](https://developer.mozilla.org/zh-CN/docs/Web/CSS/mask-image)了，这个属性用于设置元素上遮罩层的图像。使用遮罩，把不需要的地方裁切掉。遮罩图如下：
+
 <img src="https://inagora.github.io/svg-guide/res/mask.png" style="max-width:320px">
 
 它的格式是png，四个角的透明度为0。
@@ -29,6 +32,34 @@ jpg格式，大小29K，只有Png的34%。不过它不支持透明，四个角�
 代码如下：
 ``` css
 .dia{
-	background
+	background: url(./bg.jpg);
+	background-size: 100%;
+	-webkit-mask-image: url(./mask.png);
+	-webkit-mask-size: 100%;
+	mask-image: url(./mask.png);
+	mask-size: 100%;
+}
+```
+这种解决方案，需要的资源总量为 29+3=32k，是原始方案的 `38%`。
+
+### 优化第二波：svg介入
+svg既然是“图片”，那就可以替代做一些图片的工作。比如上面的mask图，是一个特别简单的几何结构，可以直接用svg替代。
+
+`mask.svg`文件内容如下：
+``` html
+<svg viewBox="0 0 566 700" class="com-mask">
+	<path id="baseShape" fill="red" d="M25 0h516a25,25 0 0,0 25,25v650a25,25 0 0,0 -25,25h-516a25,25 0 0,0 -25,-25v-650a25,25 0 0,0 25,-25Z"></path>
+</svg>
+```
+
+然后调整上面css文件的内容：
+``` css
+.dia{
+	background: url(./bg.jpg);
+	background-size: 100%;
+	-webkit-mask-image: url(./mask.svg);
+	-webkit-mask-size: 100%;
+	mask-image: url(./mask.svg);
+	mask-size: 100%;
 }
 ```
