@@ -22,40 +22,81 @@
 核心代码如下
 ``` javascript
 async function drawPoster(info){
-	let canvas = document.getElementById("canvas");
-	canvas.width = 1080;
-	canvas.height = 1040;
-	let ctx = canvas.getContext("2d");
+	// ... 一些准备代码
 
-	let bg = await loadImg('/svg-guide/res/poster-bg.jpg');
-	ctx.drawImage(bg, 0, 0);
-	
-	//绘制名字
-	ctx.font = '12px 宋体';
-	let nameWidth = ctx.measureText(info.name);
-	let x = (1080 - nameWith)/2
-	ctx.fillText(info.name, x, 150);
+	// 1. 获得“已兑换”字符串的长度。注意，需要先设置字体。另外，“元现金”的宽度我们认为和它一样
+	ctx.font = '42px "Kaiti SC"';
+	let textWidth = ctx.measureText('已兑换').width;
+	let spaceWidth = 40;
+	// 2. 如法获得金额的宽度
+	ctx.font = '140px "Kaiti SC"';
+	let moneyWidth = ctx.measureText(info.money).width;
+	// 3. 文案的总宽度。两段普通文案，两个普通文案和金额之间的空白，加金额的宽度
+	let totalWidth = textWidth*2+spaceWidth*2+moneyWidth;
+	// 4. 绘制前后两段普通文案
+	ctx.textAlign = 'start';
+	ctx.textBaseline = 'alphabetic';
+	ctx.font = '42px "Kaiti SC"';
+	ctx.fillText('已兑换', (posterWidth-totalWidth)/2, 390);
+	ctx.fillText('元现金', posterWidth-(posterWidth-totalWidth)/2-textWidth, 390);
+	// 5. 绘制金额
+	ctx.font = '140px "Kaiti SC"';
+	ctx.fillStyle='#a70322';
+	ctx.fillText(info.money, (posterWidth-moneyWidth)/2, 400);
 
-	//同样绘制积分和抵现金额。其中积分中各处字体大小不一样，等分开测量了
-
-	//最后输出内容就行了
-	return canvas.toDataURL("image/jpeg", 0.9);
+	// ... 其它处理代码
 }
 ```
-因为代码太多，就不一一贴出了，源码请查看[html](html)。
+[demo地址](https://inagora.github.io/svg-guide/res/poster-canvas.html)，[查看完整源码](https://github.com/inagora/svg-guide/blob/gh-pages/res/poster-canvas.html)。上面代码片断绘制了“已兑换1.50元现金”的文案。为了让这段文字居中，就需要用measureText获得每一段文本的长度，然后根据总宽度，小心计算它们应该的渲染位置。例子中的文字比较少，如果多了；或者样式复杂的时候，使用canvas直接绘制，会让代码变得很臃肿。而且，不方便调试，因为不能直接在开发者工具里修改即所见。
 
-从代码可以看出，绘制时，不同颜色、不同字体、不同字号的地方，都需要单独计算，每一处位置都要算的明明白白的才行，着实有些费劲。
-
-既然计算的部分占用了大量代码，我们就想办法把“计算”工作交出去。
-
+下面用一种“hack”方式，把布局工具交给浏览器。
 ## 使用浏览器布局
-浏览器里可以方便的用css控制内容的居中，我们利用浏览器帮我们布局，然后我们获得布局后文字的位置，直接绘制在画布中就行了。比如上例中，我们先用html和css把内容放好。
+浏览器里可以方便的用css控制内容的布局，对于居中我们有的是办法。那我们索性把这个任务交给它，然后我们获得每个文字的位置，直接绘制在画布中就行了。比如上例中，我们先用html和css把内容放好。
 ``` html
 <style>
 .poster{
-	position: abs
+	position: absolute;
+	width: 721px;
+	height: 920px;
+	left: -10000px;
+	border: 1px solid #000;
+	font-family: "Kaiti SC";
+	text-align: center;
 }
+.uname{
+	font-size: 36px;
+	padding-top:150px;
+}
+/* 其它样式内容见源码 */
 </style>
 <div class="poster">
+	<div class="uname"></div>
+	<div class="money"></div>
 </div>
 ```
+然后使用js填充内容。
+``` javascript
+let moneyHtml = '已兑换'.split('').map(word=>`<span>${word}</span>`).join('');
+moneyHtml += info.money.split('').map(word=>`<strong>${word}</strong>`).join('');
+moneyHtml += '元现金'.split('').map(word=>`<span>${word}</span>`).join('');
+document.querySelector('.money').innerHTML = moneyHtml;
+```
+注意，上面把文本都用`span`和`strong`标签分开包裹起来，目的是方便接下来用js单独获得每个字符的位置，直接渲染。
+
+然后就是把dom中的内容，“复制”到canvas上。
+``` javascript
+//绘制金额
+ctx.font = '42px "Kaiti SC"';
+for(let word of document.querySelectorAll('.money span')){
+	let rect = word.getBoundingClientRect();
+	ctx.fillText(word.innerHTML, rect.left-left, rect.top-top);
+}
+ctx.font = '140px "Kaiti SC"';
+ctx.fillStyle='#a70322';
+for(let word of document.querySelectorAll('.money strong')){
+	let rect = word.getBoundingClientRect();
+	ctx.fillText(word.innerHTML, rect.left-left, rect.top-top);
+}
+```
+它获取每个字的dom元素，然后挨个儿绘制到canvas上。这种方案特别适合大量文字的情况，尤其是可以方便解决换行问题。因为canvas里的文本不会自动换行，要自己算在哪里换行，太麻烦了。
+[demo地址](https://inagora.github.io/svg-guide/res/poster-dom.html)，[查看完整源码](https://github.com/inagora/svg-guide/blob/gh-pages/res/poster-dom.html)。

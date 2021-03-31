@@ -38,19 +38,22 @@
         ctx.fillText(info.name, posterWidth/2, 165);
 
         //绘制金额
+        // 1. 获得“已兑换”字符串的长度。注意，需要先设置字体。另外，“元现金”的宽度我们认为和它一样
         ctx.font = '42px "Kaiti SC"';
         let textWidth = ctx.measureText('已兑换').width;
         let spaceWidth = 40;
+        // 2. 如法获得金额的宽度
         ctx.font = '140px "Kaiti SC"';
         let moneyWidth = ctx.measureText(info.money).width;
+        // 3. 文案的总宽度。两段普通文案，两个普通文案和金额之间的空白，加金额的宽度
         let totalWidth = textWidth*2+spaceWidth*2+moneyWidth;
-
+        // 4. 绘制前后两段普通文案
         ctx.textAlign = 'start';
         ctx.textBaseline = 'alphabetic';
         ctx.font = '42px "Kaiti SC"';
         ctx.fillText('已兑换', (posterWidth-totalWidth)/2, 390);
         ctx.fillText('元现金', posterWidth-(posterWidth-totalWidth)/2-textWidth, 390);
-
+        // 5. 绘制金额
         ctx.font = '140px "Kaiti SC"';
         ctx.fillStyle='#a70322';
         ctx.fillText(info.money, (posterWidth-moneyWidth)/2, 400);
