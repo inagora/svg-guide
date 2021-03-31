@@ -1,0 +1,9 @@
+<?xml version="1.0" standalone="no"?>
+<svg viewBox="0 0 566 700" width="566" height="700" version="1.1" xmlns="http://www.w3.org/2000/svg">
+	<defs>
+		<path id="baseShape" d="M25 0h516a25,25 0 0,0 25,25v650a25,25 0 0,0 -25,25h-516a25,25 0 0,0 -25,-25v-650a25,25 0 0,0 25,-25Z"></path>
+	</defs>
+	<use id="bg" href="#baseShape" fill="#db3e4a" />
+	<use id="line" href="#baseShape" stroke="#e09b6c" fill="transparent" stroke-width="1" x="11" y="11" style="transform:scale(0.96,0.97);" />
+	<image id="card" x="95" y="78" href="./card.jpg" height="382" width="420"></image>
+</svg>

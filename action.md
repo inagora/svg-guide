@@ -73,6 +73,7 @@ svg一方面是“图”，一方面又具有完全可编程特性，这让它�
 }
 ```
 一通操作后，就不需要mask.png这个图片了，增加了一个100多字节的svg文件，资源又减少了些许。
+[demo](https://inagora.github.io/svg-guide/res/compress-svg.html) [源码](https://github.com/inagora/svg-guide/blob/gh-pages/res/compress-svg.html)
 
 ## 优化第三波：svg的直接绘制
 上面即然已经用了svg，咱就把svg用到极致，连弹窗背景也直接用svg画吧。
