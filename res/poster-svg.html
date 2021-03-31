@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>post - canvas</title>
+	</head>
+	<body>
+		<style>
+			.poster{
+				position: absolute;
+				width: 721px;
+				height: 920px;
+				left: -10000px;
+				border: 1px solid #000;
+				font-family: "Kaiti SC";
+				text-align: center;
+			}
+			.uname{
+				font-size: 36px;
+				padding-top:150px;
+			}
+			.money{
+				font-size: 42px;
+				padding-top: 80px;
+				line-height: 1;
+			}
+			.money span{
+				display: inline-block;
+				vertical-align: text-top;
+			}
+			.money strong{
+				font-size: 140px;
+				display: inline-block;
+			}
+			.money strong:first-of-type{
+				margin-left: 40px;
+			}
+			.money strong:last-of-type{
+				margin-right: 40px;
+			}
+			#poster{
+				width: 721px;
+				height: 920px;
+			}
+		</style>
+		<svg id="poster" viewBox="0 0 721 920">
+			<style type="text/css">
+				.firstb { fill: yellow; }
+				.secondb { fill: red; }
+			</style>
+			<image x="0" y="0" width="721" height="920" href="https://inagora.github.io/svg-guide/res/poster-bg.jpg" />
+			<text x="360" y="165" dominant-baseline="middle" text-anchor="middle" fill="#282521" style="font: 36px 'Kaiti SC'">poker</text>
+			<text x="360" y="400" text-anchor="middle" fill="#282521" style="font: 42px 'Kaiti SC'">
+				<tspan dominant-baseline="ideographic">已兑换</tspan>
+				<tspan style="font-size: 140px; fill: rgb(167, 3, 34);">1.50</tspan>
+				<tspan dominant-baseline="ideographic">元现金</tspan>
+			</text>
+		</svg>
+		<script>
+			function loadImg(url){
+				return new Promise((resolve) => {
+					let img = new Image();
+					img.setAttribute('crossOrigin', 'Anonymous');
+					img.onload = function () {
+							return resolve(this);
+					};
+					if(url instanceof window.SVGSVGElement){
+						var xml = new XMLSerializer().serializeToString(document.querySelector('#poster'));
+						img.src = 'data:image/svg+xml;base64,'+window.btoa(unescape(encodeURIComponent(xml)));
+					} else
+						img.src = url;
+				});
+			}
+
+			async function drawPoster(info){
+				let posterWidth = 721;
+				let posterHeight = 920;
+				let canvas = document.createElement('canvas');
+
+				canvas.width = posterWidth;
+				canvas.height = posterHeight;
+				let ctx = canvas.getContext('2d');
+
+				//绘制背景
+				let bg = await loadImg('/svg-guide/res/poster-bg.jpg');
+				ctx.drawImage(bg, 0, 0);
+				
+				let svgImg = await loadImg(document.querySelector('#poster'));
+				ctx.drawImage(svgImg, 0, 0);
+
+				document.body.appendChild(canvas);
+			}
+
+			drawPoster({name:'poker', money:'1.50'});
+		</script>
+	</body>
+</html>
