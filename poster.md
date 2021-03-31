@@ -3,7 +3,7 @@
 
 <img src="https://inagora.github.io/svg-guide/res/poster.jpg" style="max-width:320px">
 
-如上图中，用户名、已兑换积分、可抵现这三句话，是用户当前活动数据，每个人不一样。字符串长度就不一样。
+如上图中，用户名、已兑换积分、可抵现这三句话，是用户当前活动数据，每个人不一样。字符串长度就不一样，要让它们居中显示。
 
 本文介绍三种方式完成海报的绘制，各有利弊：
 1. 直接使用canvas绘制。使用measureText函数计算文本应该显示的宽度，然后计算它应该绘制的位置；
@@ -19,17 +19,6 @@
 
 核心代码如下
 ``` javascript
-function loadImg(url){
-	return new Promise(resolve=>{
-		let img = new Image();
-		img.setAttribute('crossOrigin', 'Anonymous');
-		img.onload = function(){
-			resolve(this);
-		};
-		img.src = url;
-	});
-}
-
 async function drawPoster(info){
 	let canvas = document.getElementById("canvas");
 	canvas.width = 1080;
@@ -50,4 +39,21 @@ async function drawPoster(info){
 	//最后输出内容就行了
 	return canvas.toDataURL("image/jpeg", 0.9);
 }
+```
+因为代码太多，就不一一贴出了，源码请查看[html](html)。
+
+从代码可以看出，绘制时，不同颜色、不同字体、不同字号的地方，都需要单独计算，每一处位置都要算的明明白白的才行，着实有些费劲。
+
+既然计算的部分占用了大量代码，我们就想办法把“计算”工作交出去。
+
+## 使用浏览器布局
+浏览器里可以方便的用css控制内容的居中，我们利用浏览器帮我们布局，然后我们获得布局后文字的位置，直接绘制在画布中就行了。比如上例中，我们先用html和css把内容放好。
+``` html
+<style>
+.poster{
+	position: abs
+}
+</style>
+<div class="poster">
+</div>
 ```

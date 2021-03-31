@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>post - canvas</title>
+	</head>
+	<body>
+		<script>
+			function loadImg(url){
+				return new Promise((resolve) => {
+					let img = new Image();
+					img.setAttribute('crossOrigin', 'Anonymous');
+					img.onload = function () {
+						return resolve(this);
+					};
+					img.src = url;
+				});
+			}
+
+			async function drawPoster(info){
+				let canvas = document.createElement('canvas');
+				canvas.width = 721;
+				canvas.height = 920;
+				let ctx = canvas.getContext('2d');
+
+				//绘制背景
+				let bg = await loadImg('/svg-guide/res/poster-bg.jpg');
+				ctx.drawImage(bg, 0, 0);
+
+				//绘制用户名
+				ctx.font = '36px 宋体';
+				let nameWidth = ctx.measureText(info.name);
+				let x = (1080 - nameWith)/2
+				ctx.fillText(info.name, x, 150);
+
+				//绘制兑换
+			}
+		</script>
+	</body>
+</html>
