@@ -45,14 +45,27 @@
 		</style>
 		<svg id="poster" viewBox="0 0 721 920">
 			<style type="text/css">
-				.firstb { fill: yellow; }
-				.secondb { fill: red; }
+				.uname{
+					dominant-baseline: middle;
+					text-anchor: middle;
+					fill: #282521;
+					font: 36px 'Kaiti SC';
+				}
+				.money{
+					text-anchor: middle;
+					fill: #282521;
+					font: 42px 'Kaiti SC';
+				}
+				.money-count{
+					font-size: 140px;
+					fill: rgb(167, 3, 34);
+				}
 			</style>
-			<image x="0" y="0" width="721" height="920" href="https://inagora.github.io/svg-guide/res/poster-bg.jpg" />
-			<text x="360" y="165" dominant-baseline="middle" text-anchor="middle" fill="#282521" style="font: 36px 'Kaiti SC'">poker</text>
-			<text x="360" y="400" text-anchor="middle" fill="#282521" style="font: 42px 'Kaiti SC'">
+			<!-- <image x="0" y="0" width="721" height="920" href="https://inagora.github.io/svg-guide/res/poster-bg.jpg" /> -->
+			<text x="360" y="165" class="uname">poker</text>
+			<text x="360" y="400" class="money">
 				<tspan dominant-baseline="ideographic">已兑换</tspan>
-				<tspan style="font-size: 140px; fill: rgb(167, 3, 34);">1.50</tspan>
+				<tspan class="money-count">1.50</tspan>
 				<tspan dominant-baseline="ideographic">元现金</tspan>
 			</text>
 		</svg>
