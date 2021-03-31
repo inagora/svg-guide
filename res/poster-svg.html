@@ -1,81 +1,81 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>post - canvas</title>
-	</head>
-	<body>
-		<style>
-			#poster{
-				width: 721px;
-				height: 920px;
+  <head>
+    <meta charset="utf-8">
+    <title>post - canvas</title>
+  </head>
+  <body>
+    <style>
+      #poster{
+        width: 721px;
+        height: 920px;
 
-				position: absolute;
-				left: -10000px;
-			}
-		</style>
-		<svg id="poster" viewBox="0 0 721 920">
-			<style type="text/css">
-				.uname{
-					dominant-baseline: middle;
-					text-anchor: middle;
-					fill: #282521;
-					font: 36px 'Kaiti SC';
-				}
-				.money{
-					text-anchor: middle;
-					fill: #282521;
-					font: 42px 'Kaiti SC';
-				}
-				.money-count{
-					font-size: 140px;
-					fill: rgb(167, 3, 34);
-				}
-			</style>
-			<!-- <image x="0" y="0" width="721" height="920" href="https://inagora.github.io/svg-guide/res/poster-bg.jpg" /> -->
-			<text x="360" y="165" class="uname">poker</text>
-			<text x="360" y="400" class="money">
-				<tspan dominant-baseline="ideographic">已兑换</tspan>
-				<tspan dx="40" class="money-count">1.50</tspan>
-				<tspan dx="40" dominant-baseline="ideographic">元现金</tspan>
-			</text>
-		</svg>
-		<script>
-			function loadImg(url){
-				return new Promise((resolve) => {
-					let img = new Image();
-					img.setAttribute('crossOrigin', 'Anonymous');
-					img.onload = function () {
-							return resolve(this);
-					};
-					if(url instanceof window.SVGSVGElement){
-						var xml = new XMLSerializer().serializeToString(document.querySelector('#poster'));
-						img.src = 'data:image/svg+xml;base64,'+window.btoa(unescape(encodeURIComponent(xml)));
-					} else
-						img.src = url;
-				});
-			}
+        position: absolute;
+        left: -10000px;
+      }
+    </style>
+    <svg id="poster" viewBox="0 0 721 920">
+      <style type="text/css">
+        .uname{
+          dominant-baseline: middle;
+          text-anchor: middle;
+          fill: #282521;
+          font: 36px 'Kaiti SC';
+        }
+        .money{
+          text-anchor: middle;
+          fill: #282521;
+          font: 42px 'Kaiti SC';
+        }
+        .money-count{
+          font-size: 140px;
+          fill: rgb(167, 3, 34);
+        }
+      </style>
+      <!-- <image x="0" y="0" width="721" height="920" href="https://inagora.github.io/svg-guide/res/poster-bg.jpg" /> -->
+      <text x="360" y="165" class="uname">poker</text>
+      <text x="360" y="400" class="money">
+        <tspan dominant-baseline="ideographic">已兑换</tspan>
+        <tspan dx="40" class="money-count">1.50</tspan>
+        <tspan dx="40" dominant-baseline="ideographic">元现金</tspan>
+      </text>
+    </svg>
+    <script>
+      function loadImg(url){
+        return new Promise((resolve) => {
+          let img = new Image();
+          img.setAttribute('crossOrigin', 'Anonymous');
+          img.onload = function () {
+            resolve(this);
+          };
+          if(url instanceof window.SVGSVGElement){
+            var xml = new XMLSerializer().serializeToString(document.querySelector('#poster'));
+            img.src = 'data:image/svg+xml;base64,'+window.btoa(unescape(encodeURIComponent(xml)));
+          } else
+            img.src = url;
+        });
+      }
 
-			async function drawPoster(info){
-				let posterWidth = 721;
-				let posterHeight = 920;
-				let canvas = document.createElement('canvas');
+      async function drawPoster(info){
+        let posterWidth = 721;
+        let posterHeight = 920;
+        let canvas = document.createElement('canvas');
 
-				canvas.width = posterWidth;
-				canvas.height = posterHeight;
-				let ctx = canvas.getContext('2d');
+        canvas.width = posterWidth;
+        canvas.height = posterHeight;
+        let ctx = canvas.getContext('2d');
 
-				//绘制背景
-				let bg = await loadImg('/svg-guide/res/poster-bg.jpg');
-				ctx.drawImage(bg, 0, 0);
-				
-				let svgImg = await loadImg(document.querySelector('#poster'));
-				ctx.drawImage(svgImg, 0, 0);
+        //绘制背景
+        let bg = await loadImg('/svg-guide/res/poster-bg.jpg');
+        ctx.drawImage(bg, 0, 0);
+        
+        let svgImg = await loadImg(document.querySelector('#poster'));
+        ctx.drawImage(svgImg, 0, 0);
 
-				document.body.appendChild(canvas);
-			}
+        document.body.appendChild(canvas);
+      }
 
-			drawPoster({name:'poker', money:'1.50'});
-		</script>
-	</body>
+      drawPoster({name:'poker', money:'1.50'});
+    </script>
+  </body>
 </html>

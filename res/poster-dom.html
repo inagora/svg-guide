@@ -49,7 +49,7 @@
           let img = new Image();
           img.setAttribute('crossOrigin', 'Anonymous');
           img.onload = function () {
-              return resolve(this);
+            resolve(this);
           };
           img.src = url;
         });
