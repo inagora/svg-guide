@@ -24,9 +24,15 @@
 			.money{
 				font-size: 42px;
 				padding-top: 60px;
+				line-height: 1;
+			}
+			.money span{
+				display: inline-block;
+				vertical-align: text-top;
 			}
 			.money strong{
 				font-size: 140px;
+				display: inline-block;
 			}
 			.money strong:first-of-type{
 				margin-left: 40px;
@@ -95,22 +101,6 @@
 					let rect = word.getBoundingClientRect();
 					ctx.fillText(word.innerHTML, rect.left-left, rect.top-top);
 				}
-
-				// let textWidth = ctx.measureText('已兑换').width;
-				// let spaceWidth = 40;
-				// ctx.font = '140px "Kaiti SC"';
-				// let moneyWidth = ctx.measureText(info.money).width;
-				// let totalWidth = textWidth*2+spaceWidth*2+moneyWidth;
-
-				// ctx.textAlign = 'start';
-				// ctx.textBaseline = 'alphabetic';
-				// ctx.font = '42px "Kaiti SC"';
-				// ctx.fillText('已兑换', (posterWidth-totalWidth)/2, 390);
-				// ctx.fillText('元现金', posterWidth-(posterWidth-totalWidth)/2-textWidth, 390);
-
-				// ctx.font = '140px "Kaiti SC"';
-				// ctx.fillStyle='#a70322';
-				// ctx.fillText(info.money, (posterWidth-moneyWidth)/2, 400);
 
 				document.body.appendChild(canvas);
 			}
