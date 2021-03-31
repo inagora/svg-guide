@@ -11,16 +11,19 @@
 					let img = new Image();
 					img.setAttribute('crossOrigin', 'Anonymous');
 					img.onload = function () {
-						return resolve(this);
+							return resolve(this);
 					};
 					img.src = url;
 				});
 			}
 
 			async function drawPoster(info){
+				let posterWidth = 721;
+				let posterHeight = 920;
 				let canvas = document.createElement('canvas');
-				canvas.width = 721;
-				canvas.height = 920;
+
+				canvas.width = posterWidth;
+				canvas.height = posterHeight;
 				let ctx = canvas.getContext('2d');
 
 				//绘制背景
@@ -28,13 +31,34 @@
 				ctx.drawImage(bg, 0, 0);
 
 				//绘制用户名
-				ctx.font = '36px 宋体';
-				let nameWidth = ctx.measureText(info.name);
-				let x = (1080 - nameWith)/2
-				ctx.fillText(info.name, x, 150);
+				ctx.font = '36px "Kaiti SC"';
+				ctx.fillStyle = '#282521';
+				ctx.textBaseline = 'middle';
+				ctx.textAlign = 'center';
+				ctx.fillText(info.name, posterWidth/2, 165);
 
-				//绘制兑换
+				//绘制金额
+				ctx.font = '42px "Kaiti SC"';
+				let textWidth = ctx.measureText('已兑换').width;
+				let spaceWidth = 40;
+				ctx.font = '140px "Kaiti SC"';
+				let moneyWidth = ctx.measureText(info.money).width;
+				let totalWidth = textWidth*2+spaceWidth*2+moneyWidth;
+
+				ctx.textAlign = 'start';
+				ctx.textBaseline = 'alphabetic';
+				ctx.font = '42px "Kaiti SC"';
+				ctx.fillText('已兑换', (posterWidth-totalWidth)/2, 390);
+				ctx.fillText('元现金', posterWidth-(posterWidth-totalWidth)/2-textWidth, 390);
+
+				ctx.font = '140px "Kaiti SC"';
+				ctx.fillStyle='#a70322';
+				ctx.fillText(info.money, (posterWidth-moneyWidth)/2, 400);
+
+				document.body.appendChild(canvas);
 			}
+
+			drawPoster({name:'poker', money:'1.50'});
 		</script>
 	</body>
 </html>
